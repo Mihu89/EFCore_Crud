@@ -10,6 +10,7 @@ namespace EF_Crud
         {
             Console.WriteLine("Hello World!");
             UseEF();
+            Console.WriteLine("Done/End");
             Console.Read();
         }
 
