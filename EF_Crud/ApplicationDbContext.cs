@@ -13,11 +13,14 @@ namespace EF_Crud
 
         public ApplicationDbContext()
         {
+            Database.EnsureDeleted();
             Database.EnsureCreated();
         }
         protected override void OnConfiguring(DbContextOptionsBuilder dbContextOptionsBuilder)
         {
             dbContextOptionsBuilder.UseSqlServer("Server=.;Database=UserDB;Trusted_connection=True;");
+            // use for logging of sql changes
+            dbContextOptionsBuilder.LogTo(System.Console.WriteLine);
         }
     }
 }
