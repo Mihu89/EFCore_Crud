@@ -11,13 +11,19 @@ namespace EF_Crud
     {
         public DbSet<User> Users { get; set; }
 
-        public ApplicationDbContext()
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
             Database.EnsureCreated();
         }
-        protected override void OnConfiguring(DbContextOptionsBuilder dbContextOptionsBuilder)
-        {
-            dbContextOptionsBuilder.UseSqlServer("Server=.;Database=UserDB;Trusted_connection=True;");
-        }
+
+        //public ApplicationDbContext()
+        //{
+        //    Database.EnsureCreated();
+        //}
+
+        //protected override void OnConfiguring(DbContextOptionsBuilder dbContextOptionsBuilder)
+        //{
+        //    dbContextOptionsBuilder.UseSqlServer("Server=.;Database=UserDB;Trusted_connection=True;");
+        //}
     }
 }

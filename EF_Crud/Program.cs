@@ -1,5 +1,8 @@
 ﻿using EF_Crud.Entities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
+using System.IO;
 using System.Linq;
 
 namespace EF_Crud
@@ -9,11 +12,44 @@ namespace EF_Crud
         static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
-            UseEF();
+            //UseEF();
+            UseEFWithAppSettings();
             Console.Read();
         }
 
-        private static void UseEF()
+        private static void UseEFWithAppSettings()
+        {
+            var builder = new ConfigurationBuilder();
+            builder.SetBasePath(Directory.GetCurrentDirectory());
+            builder.AddJsonFile("appsettings.json");
+
+            var config = builder.Build();
+            // read keys from file with settings
+            var secret = config["mystr"];
+            Console.WriteLine(secret);
+            var age = config["age"];
+            Console.WriteLine(age);
+
+            // read co n ection string
+
+            string connectionString = config.GetConnectionString("DefaultConnection");
+            Console.WriteLine(connectionString);
+
+            var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+            var options = optionsBuilder.UseSqlServer(connectionString).Options;
+
+            using (ApplicationDbContext dbContext = new ApplicationDbContext(options))
+            {
+                var users = dbContext.Users.ToList();
+
+                foreach (var user in users)
+                {
+                    Console.WriteLine($"{user.Id} {user.Name} {user.Age}");
+                }
+            }
+        }
+
+        /*private static void UseEF()
         {
             using (ApplicationDbContext dbContext = new ApplicationDbContext())
             {
@@ -45,5 +81,6 @@ namespace EF_Crud
 
             }
         }
+        */
     }
 }
